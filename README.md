@@ -4,6 +4,10 @@
 
 mac2droid is a graphical user interface (GUI) tool designed for managing files between an Android device and a Mac computer using `adb` (Android Debug Bridge). This tool provides an intuitive interface to navigate directories, and copy files to and from your Android device.
 
+## Screenshots
+<img width="1152" alt="Screenshot 2024-07-26 at 11 53 19 PM" src="https://github.com/user-attachments/assets/7ca37a20-ba2c-4c74-9ac9-cd587622637f">
+
+
 ## Features
 
 - **Directory Navigation**: Easily browse through directories on your Android device.
