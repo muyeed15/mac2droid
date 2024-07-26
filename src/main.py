@@ -5,7 +5,7 @@ from src.styles import apply_styles
 
 def main():
     root = Tk()
-    root.title("mac2droid : v0.0.1a")
+    root.title("mac2droid : v0.0.1a : muyeed15")
 
     apply_styles()
     root_geometry(root, 1040, 600)
