@@ -42,8 +42,8 @@ mac2droid is a graphical user interface (GUI) tool designed for managing files b
 ## Usage
 
 1. **Prepare Your Device**:
-   - Connect your Android device to your Mac using a USB cable.
-   - Enable USB debugging on your Android device.
+   - Connect your Android device to your Mac using WIFI or a USB cable.
+   - Enable WIFI debugging or USB debugging on your Android device.
 
 2. **Launch the Tool**:
     ```sh
