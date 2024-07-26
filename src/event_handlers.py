@@ -52,14 +52,24 @@ def pasteFolder(item_path, current_target, parent):
         createDirectoryView(parent, current_target[0])
         messagebox.showinfo("Paste", f"Pasted item: {item_path} from {directory} to {destination_path}")
 
+
+def deleteItem(item_path, current_target, parent):
+    from src.gui import createDirectoryView
+
+    source_path = f"/storage/self/{current_target[0]}/{item_path}"
+    os.system(f'adb shell rm -rf "{source_path}"')
+    createDirectoryView(parent, current_target[0])
+    messagebox.showinfo("Copy", f"Deleted item: {item_path}")
+
+
 def showContextMenu(event, item_path, root, current_target):
     context_menu = Menu(root, tearoff=0)
     context_menu.add_command(label="Copy To", command=lambda: copyItem(item_path, current_target, root))
     context_menu.add_command(label="Copy From [file]", command=lambda: pasteItem(item_path, current_target, root))
     context_menu.add_command(label="Copy From [folder]", command=lambda: pasteFolder(item_path, current_target, root))
 
-    if item_path is not "":
-        context_menu.add_command(label="Delete", command=lambda: pasteFolder(item_path, current_target, root))
+    if item_path != "":
+        context_menu.add_command(label="Delete", command=lambda: deleteItem(item_path, current_target, root))
 
     context_menu.post(event.x_root, event.y_root)
 
