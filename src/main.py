@@ -8,7 +8,7 @@ def main():
     root.title("mac2droid : v0.0.1a")
 
     apply_styles()
-    root_geometry(root, 1242, 720)
+    root_geometry(root, 1040, 600)
 
     createDirectoryView(root, "")
 
