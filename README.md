@@ -15,7 +15,7 @@ mac2droid is a graphical user interface (GUI) tool designed for managing files b
 
 ## Requirements
 
-- Python 3.x
+- Python >= 3.10 (Anaconda)
 - Tkinter library
 - ADB (Android Debug Bridge)
 
