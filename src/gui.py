@@ -1,11 +1,88 @@
-from tkinter import Canvas, Button, ttk
+from tkinter import Canvas, PhotoImage, Label, ttk
 from src.adb_utils import fileList
 
 current_target = [""]
 directory_history = []
 
+file_icons = {
+    '.txt': 'txt.png',
+    '.jpg': 'jpg.png',
+    '.jpeg': 'jpg.png',
+    '.png': 'png.png',
+    '.gif': 'gif.png',
+    '.bmp': 'bmp.png',
+    '.txt': 'txt.png',
+    '.webp': 'png.png',
+    '.pdf': 'pdf.png',
+    '.doc': 'docx.png',
+    '.docx': 'docx.png',
+    '.xls': 'xlsx.png',
+    '.xlsx': 'xlsx.png',
+    '.ppt': 'pptx.png',
+    '.pptx': 'pptx.png',
+    '.zip': 'zip.png',
+    '.rar': 'zip.png',
+    '.7z': 'zip.png',
+    '.tar': 'zip.png',
+    '.gz': 'zip.png',
+    '.py': 'py.png',
+    '.java': 'java.png',
+    '.cpp': 'shell.png',
+    '.c': 'shell.png',
+    '.html': 'txt.png',
+    '.css': 'shell.png',
+    '.js': 'shell.png',
+    '.mp4': 'vid.png',
+    '.avi': 'vid.png',
+    '.mov': 'vid.png',
+    '.mkv': 'vid.png',
+    '.wmv': 'vid.png',
+    '.flv': 'vid.png',
+    '.mp3': 'mus.png',
+    '.wav': 'mus.png',
+    '.aac': 'mus.png',
+    '.ogg': 'mus.png',
+    '.flac': 'mus.png',
+    '.iso': 'zip.png',
+    '.dmg': 'app.png',
+    '.torrent': 'shell.png',
+    '.apk': 'apk.png',
+    '.psd': 'shell.png',
+    '.ai': 'shell.png',
+    '.svg': 'shell.png',
+    '.raw': 'shell.png',
+    '.epub': 'shell.png',
+    '.mobi': 'shell.png',
+    '.chm': 'shell.png',
+    '.log': 'txt.png',
+    '.sqlite': 'shell.png',
+    '.db': 'shell.png',
+    '.sql': 'shell.png',
+    '.bat': 'shell.png',
+    '.sh': 'shell.png',
+    '.pl': 'shell.png',
+    '.r': 'shell.png',
+    '.md': 'txt.png',
+    '.csv': 'shell.png',
+    '.json': 'shell.png',
+    '.yaml': 'shell.png',
+    '.xml': 'shell.png',
+    'default': 'folder.png'
+}
+
 def createDirectoryView(parent, target):
     from src.event_handlers import goBack, openNewDirectory, showContextMenu, on_mouse_scroll
+
+    def truncate_text(text, max_length):
+        if '.' in text:
+            name, ext = text.rsplit('.', 1)
+            ext = '.' + ext
+        else:
+            name, ext = text, ''
+        
+        truncated_name = name if len(name) <= (max_length - len(ext)) else name[:(max_length - len(ext)) - 3] + "..."
+        
+        return truncated_name + ext
 
     for widget in parent.winfo_children():
         widget.destroy()
@@ -19,7 +96,7 @@ def createDirectoryView(parent, target):
     back_button = ttk.Button(path_button_frame, text="Back", command=lambda: goBack(createDirectoryView, parent, current_target, directory_history))
     back_button.pack(side="left")
 
-    path_label = ttk.Label(path_button_frame, text=f"/{target if target else '/'}")
+    path_label = ttk.Label(path_button_frame, text=f"{target if target else '/'}")
     path_label.pack(side="left", padx=5, expand=True)
 
     refresh_button = ttk.Button(path_button_frame, text="Refresh", command=lambda: createDirectoryView(parent, current_target[0]))
@@ -42,16 +119,27 @@ def createDirectoryView(parent, target):
     canvas.bind("<Button-3>", lambda event: showContextMenu(event, "", parent, current_target))
 
     row, column = 0, 0
-    max_columns = 4
-    button_width = 32
-    button_height = 5
+    max_columns = 9
+
+    max_name_length = 15
 
     for item in fileList(target):
-        button = Button(button_frame, text=item, width=button_width, height=button_height, font="Helvetica, 12", command=lambda item=item: openNewDirectory(item, createDirectoryView, parent, current_target, directory_history))
-        button.grid(row=row, column=column, padx=5, pady=5, sticky="ew")
+        frame = ttk.Frame(button_frame)
+        frame.grid(row=row, column=column, padx=5, pady=5, sticky="nsew")
 
-        button.bind("<Button-2>", lambda event, item=item: showContextMenu(event, item, parent, current_target))
-        button.bind("<Button-3>", lambda event, item=item: showContextMenu(event, item, parent, current_target))
+        file_extension = item.rsplit('.', 1)[-1] if '.' in item else 'default'
+        icon_file = file_icons.get(f'.{file_extension}', file_icons['default'])
+        file_icon = PhotoImage(file="src/icon/"+icon_file)
+
+        truncated_name = truncate_text(item, max_name_length)
+
+        icon_label = Label(frame, image=file_icon, text=truncated_name, compound="top", font="Helvetica 12", wraplength=80, bd=0, highlightthickness=0)
+        icon_label.image = file_icon
+        icon_label.pack(side="top", padx=10, pady=(5, 0))
+
+        icon_label.bind("<Button-1>", lambda event, item=item: openNewDirectory(item, createDirectoryView, parent, current_target, directory_history))
+        icon_label.bind("<Button-2>", lambda event, item=item: showContextMenu(event, item, parent, current_target))
+        icon_label.bind("<Button-3>", lambda event, item=item: showContextMenu(event, item, parent, current_target))
 
         column += 1
         if column == max_columns:
