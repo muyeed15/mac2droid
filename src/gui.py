@@ -93,14 +93,31 @@ def createDirectoryView(parent, target):
     path_button_frame = ttk.Frame(top_frame)
     path_button_frame.pack(side="top", fill="x", padx=10, pady=5)
 
-    back_button = ttk.Button(path_button_frame, text="Back", command=lambda: goBack(createDirectoryView, parent, current_target, directory_history))
-    back_button.pack(side="left")
+    back_icon = PhotoImage(file="src/icon/back.png")
+    refresh_icon = PhotoImage(file="src/icon/refresh.png")
 
-    path_label = ttk.Label(path_button_frame, text=f"{target if target else '/'}")
-    path_label.pack(side="left", padx=5, expand=True)
+    back_label = Label(path_button_frame, image=back_icon)
+    back_label.image = back_icon
+    back_label.pack(side="left")
+    back_label.bind("<Button-1>", lambda event: goBack(createDirectoryView, parent, current_target, directory_history))
 
-    refresh_button = ttk.Button(path_button_frame, text="Refresh", command=lambda: createDirectoryView(parent, current_target[0]))
-    refresh_button.pack(side="right", padx=13)
+    refresh_label = Label(path_button_frame, image=refresh_icon)
+    refresh_label.image = refresh_icon
+    refresh_label.pack(side="right", padx=13)
+    refresh_label.bind("<Button-1>", lambda event: createDirectoryView(parent, current_target[0]))
+
+    path_parts = target.strip('/').split('/') if target else []
+    current_path = ''
+
+    def create_path_button(text, path):
+        button = ttk.Button(path_button_frame, text=text, style="Path.TButton")
+        button.pack(side="left", padx=5)
+        return button
+
+    create_path_button('/', '')
+    for part in path_parts:
+        current_path += f'/{part}'
+        create_path_button(part, current_path)
 
     canvas = Canvas(parent)
     scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
