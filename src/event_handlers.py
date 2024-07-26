@@ -52,7 +52,6 @@ def pasteFolder(item_path, current_target, parent):
         createDirectoryView(parent, current_target[0])
         messagebox.showinfo("Paste", f"Pasted item: {item_path} from {directory} to {destination_path}")
 
-
 def deleteItem(item_path, current_target, parent):
     from src.gui import createDirectoryView
 
@@ -60,7 +59,6 @@ def deleteItem(item_path, current_target, parent):
     os.system(f'adb shell rm -rf "{source_path}"')
     createDirectoryView(parent, current_target[0])
     messagebox.showinfo("Copy", f"Deleted item: {item_path}")
-
 
 def showContextMenu(event, item_path, root, current_target):
     context_menu = Menu(root, tearoff=0)
